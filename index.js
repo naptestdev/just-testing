@@ -15,6 +15,8 @@ let current = Number(
     .then((res) => res.data)
 );
 
+await axios.post("https://counter-api.napdev.workers.dev/");
+
 axiosRetry(axios, {
   retryCondition: (result) => result.response.status === 429,
   retries: Infinity,
@@ -50,5 +52,3 @@ for (const [index, password] of passwords.entries()) {
     );
   }
 }
-
-await axios.post("https://counter-api.napdev.workers.dev/");
