@@ -9,12 +9,16 @@ const passwords = fs
 
 const teachers = fs.readFileSync("./teachers.txt", "utf-8").trim().split("\n");
 
-let current = Number(fs.readFileSync("./current.txt", "utf-8"));
+let current = Number(
+  await axios
+    .get("https://counter-api.napdev.workers.dev/")
+    .then((res) => res.data)
+);
 
 axiosRetry(axios, {
   retryCondition: (result) => result.response.status === 429,
   retries: Infinity,
-  retryDelay: axiosRetry.exponentialDelay,
+  retryDelay: 60,
 });
 
 const teacher = teachers[current];
@@ -47,4 +51,4 @@ for (const [index, password] of passwords.entries()) {
   }
 }
 
-fs.writeFileSync("./current.txt", String(current + 1));
+await axios.post("https://counter-api.napdev.workers.dev/");
